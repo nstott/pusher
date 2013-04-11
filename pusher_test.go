@@ -27,8 +27,6 @@ func Test_PublishEvent(t *testing.T) {
 	defer dummy.Close()
 	endpoint = "http://" + dummy.Listener.Addr().String()
 
-	var pusher = NewPusher(auth2)
-
 	var data = []struct {
 		name    string
 		data    string
@@ -48,7 +46,7 @@ func Test_PublishEvent(t *testing.T) {
 	}
 
 	for k, v := range data {
-		resp, err := pusher.PublishEvent(v.name, v.data, v.channel)
+		resp, err := PublishEvent(v.name, v.data, v.channel, auth2)
 		if err != nil {
 			t.Error(err)
 		}

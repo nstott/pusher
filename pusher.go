@@ -19,28 +19,19 @@ func NewAuth(app_id, key, secret string) *Auth {
 	return &Auth{app_id, key, secret}
 }
 
-type Pusher struct {
-	auth *Auth
-}
-
-//creates a new pusher struct
-func NewPusher(auth *Auth) *Pusher {
-	return &Pusher{auth}
-}
-
 //publish data with a specic name to a channel
-func (p *Pusher) PublishEvent(name, data, channel string) ([]byte, error) {
+func PublishEvent(name, data, channel string, auth *Auth) ([]byte, error) {
 	message := &Message{name, data, nil, channel, ""}
-	return p.sendPost(fmt.Sprintf("/apps/%s/events", p.auth.app_id), message)
+	return sendPost(fmt.Sprintf("/apps/%s/events", auth.app_id), message, auth)
 }
 
 //publish data with a specific name to array of channels
-func (p *Pusher) BroadcastEvent(name, data string, channels []string) ([]byte, error) {
+func BroadcastEvent(name, data string, channels []string, auth *Auth) ([]byte, error) {
 	message := &Message{name, data, channels, "", ""}
-	return p.sendPost(fmt.Sprintf("/apps/%s/events", p.auth.app_id), message)
+	return sendPost(fmt.Sprintf("/apps/%s/events", auth.app_id), message, auth)
 }
 
-func (p *Pusher) sendPost(path string, message *Message) ([]byte, error) {
+func sendPost(path string, message *Message, auth *Auth) ([]byte, error) {
 
 	jsonMessage, err := json.Marshal(message)
 	if err != nil {
@@ -49,7 +40,7 @@ func (p *Pusher) sendPost(path string, message *Message) ([]byte, error) {
 
 	// generate and sign the request
 	r := NewRequest(jsonMessage, "POST", path)
-	url := r.buildUrl(p.auth)
+	url := r.buildUrl(auth)
 
 	resp, err := http.Post(endpoint+url, "application/json", bytes.NewReader(jsonMessage))
 	if err != nil {
