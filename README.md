@@ -23,6 +23,7 @@ func BroadcastEvent(name, data string, channels []string, auth *Auth) ([]byte, e
 
 example
 =======
+```
   import (
     "github.com/nstott/pusher"
   )
@@ -35,3 +36,4 @@ example
       // something bad happened
     }
   }
+```
