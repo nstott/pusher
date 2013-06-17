@@ -69,5 +69,5 @@ func sendPost(path string, message *Message, auth *Auth) ([]byte, error) {
 	case 403:
 		return nil, errors.New("Forbidden: Account Disabled or over quota")
 	}
-	return nil, errors.New("Unknown Error")
+	return nil, errors.New(fmt.Sprintf("Unknown Error, code: %d", resp.StatusCode))
 }
