@@ -11,6 +11,7 @@ import (
 )
 
 var auth2 = &Auth{
+	"",
 	"41195",
 	"1dd19b6bb91e2f5e1a37",
 	"0a8c6be51a2b94b04eca",
@@ -25,7 +26,7 @@ type TestResponse struct {
 func Test_PublishEvent(t *testing.T) {
 	dummy := httptest.NewServer(http.HandlerFunc(testHandler))
 	defer dummy.Close()
-	endpoint = "http://" + dummy.Listener.Addr().String()
+	auth2.endpoint = "http://" + dummy.Listener.Addr().String()
 
 	var data = []struct {
 		name    string

@@ -15,7 +15,6 @@ type Request struct {
 	body_md5       string
 }
 
-var endpoint = "http://api.pusherapp.com"
 var auth_version = "1.0"
 
 /*

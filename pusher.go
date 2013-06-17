@@ -10,13 +10,18 @@ import (
 )
 
 type Auth struct {
-	app_id string
-	key    string
-	secret string
+	endpoint string
+	app_id   string
+	key      string
+	secret   string
 }
 
-func NewAuth(app_id, key, secret string) *Auth {
-	return &Auth{app_id, key, secret}
+func NewDefaultAuth(app_id, key, secret string) *Auth {
+	return &Auth{"http://api.pusherapp.com", app_id, key, secret}
+}
+
+func NewAuth(endpoint, app_id, key, secret string) *Auth {
+	return &Auth{endpoint, app_id, key, secret}
 }
 
 //publish data with a specic name to a channel
@@ -42,7 +47,7 @@ func sendPost(path string, message *Message, auth *Auth) ([]byte, error) {
 	r := NewRequest(jsonMessage, "POST", path)
 	url := r.buildUrl(auth)
 
-	resp, err := http.Post(endpoint+url, "application/json", bytes.NewReader(jsonMessage))
+	resp, err := http.Post(auth.endpoint+url, "application/json", bytes.NewReader(jsonMessage))
 	if err != nil {
 		return nil, err
 	}
